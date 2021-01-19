@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DropIn</title>
+</head>
+{{ $path := .URL.Current }} 
+<body>
+
+    <div>
+        <h1>
+    {{ range .URL.Road }} 
+        <a href="{{ .Path }}{{ .Name }}"> {{ .Name }} </a> >
+    {{ end }}
+        </h1>
+    </div>
+
+    <div class="col-sm-3">
+            <a href="{{ .URL.Return }}">..</a>
+    </div>
+    <div>
+        {{ range .Elems }}
+            {{ if eq .Type "Folder"}}
+                <a href="{{ $path }}/{{ .Name }}">[{{ .Name }}]</a>
+            {{ else }}
+                <a href="{{ $path }}/{{ .Name }}">{{ .Name }}</a>
+            {{ end }}
+                <br>
+        {{ end }}
+    </div>
+</body>
+</html>
