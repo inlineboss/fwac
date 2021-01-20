@@ -5,62 +5,17 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/inlineboss/fwac/fs"
+	"github.com/inlineboss/fwac/url"
 )
 
 var ROOT_DIR string
 
-type DetailDir struct {
-	Name string
-	Path string
-}
-
-func ExtractDirs(path string) []DetailDir {
-
-	if len(path) == 0 {
-		return nil
-	}
-
-	var details []DetailDir
-	var name string
-
-	for i := len(strings.Split(path, "/")) - 1; i > 0; i-- {
-		name, path = ExtractLastDir(path)
-
-		if name != "" || path != "" {
-			details = append(details, DetailDir{Name: name, Path: path})
-		}
-	}
-
-	if details == nil {
-		return append(details, DetailDir{Name: path, Path: "/"})
-	}
-
-	return details
-}
-
-func ExtractLastDir(path string) (n string, p string) {
-	if len(path) == 0 || path == "/" {
-		return "", ""
-	}
-
-	lastPos := strings.LastIndexByte(path, '/')
-	if lastPos == -1 || lastPos == 0 {
-		return "", ""
-	}
-
-	n = path[lastPos+1:]
-	p = path[0:lastPos]
-
-	return n, p
-}
-
 type HTMLObject struct {
 	URL struct {
-		Road    []DetailDir
+		Road    url.Details
 		Return  string
 		Current string
 	}
@@ -76,9 +31,9 @@ func (htmlObjects *HTMLObject) resetPaths() {
 	htmlObjects.URL.Current = ROOT_DIR
 	htmlObjects.URL.Return = ROOT_DIR
 	htmlObjects.Elems = fs.ShowDir(ROOT_DIR)
-	htmlObjects.URL.Road = []DetailDir{
-		DetailDir{"/", ROOT_DIR},
-	}
+	// htmlObjects.URL.Road = []DetailDir{
+	// 	DetailDir{"/", ROOT_DIR},
+	// }
 }
 
 func (htmlObjects *HTMLObject) setPath(path string) {
@@ -89,11 +44,10 @@ func (htmlObjects *HTMLObject) setPath(path string) {
 	htmlObjects.URL.Current = path
 	htmlObjects.Elems = fs.ShowDir(path)
 
-	_, htmlObjects.URL.Return = ExtractLastDir(path)
+	// _, htmlObjects.URL.Return = ExtractLastDir(path)
 
-	str := strings.TrimLeft(htmlObjects.URL.Current, ROOT_DIR)
-	http.
-		htmlObjects.URL.Road = ExtractDirs(str)
+	//str := strings.TrimLeft(htmlObjects.URL.Current, ROOT_DIR)
+	// htmlObjects.URL.Road = ExtractDirs(str)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -125,7 +79,9 @@ func aboutHandler(w http.ResponseWriter, r *http.Request) {
 
 func setHandlers() {
 	http.HandleFunc("/", homeHandler)
-	http.HandleFunc("/about/", aboutHandler)
+	// http.HandleFunc("/about/", aboutHandler)
+	fs := http.FileServer(http.Dir("/Users/inlineboss"))
+	http.Handle("/inlineboss/", http.StripPrefix("/static", fs))
 }
 func cherr(err error) {
 	if err != nil {
