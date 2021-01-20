@@ -12,7 +12,8 @@ func lst(str string) byte {
 	return str[len(str)-1]
 }
 
-func ExtractLasts(path string) Details {
+// ExtractDetails -
+func ExtractDetails(path string) Details {
 
 	if len(path) == 0 {
 		return nil
@@ -25,54 +26,7 @@ func ExtractLasts(path string) Details {
 	)
 
 	for {
-		detail, end = ExtractLast(detail.Path)
-
-		if end {
-			break
-		}
-
-		details = append(details, detail)
-	}
-
-	return details
-}
-
-func ExtractLast(path string) (Detail, bool) {
-
-	if len(path) == 0 {
-		return (Detail{}), true
-	}
-
-	if path == string('/') {
-		return (Detail{string('/'), string('/')}), true
-	}
-
-	lastPos := strings.LastIndexByte(path, '/')
-
-	if lastPos <= 0 {
-		return (Detail{string('/'), string('/')}), true
-	}
-
-	n := path[lastPos+1:]
-	p := path[0:lastPos]
-
-	return (Detail{n, p}), false
-}
-
-func ExtractPaths(path string) Details {
-
-	if len(path) == 0 {
-		return nil
-	}
-
-	var (
-		details Details
-		detail  Detail = Detail{Name: "", Path: path}
-		end     bool
-	)
-
-	for {
-		detail, end = ExtractPath(detail.Path)
+		detail, end = ExtractDetail(detail.Path)
 
 		if end {
 			break
@@ -91,8 +45,8 @@ func ExtractPaths(path string) Details {
 	return details
 }
 
-// ExtractPath -
-func ExtractPath(path string) (Detail, bool) {
+// ExtractDetail -
+func ExtractDetail(path string) (Detail, bool) {
 
 	lastPos := strings.LastIndexByte(path, '/')
 
@@ -106,7 +60,7 @@ func ExtractPath(path string) (Detail, bool) {
 	n := path[lastPos+1:]
 
 	if n == "" {
-		d, _ := ExtractPath(path[:lastPos])
+		d, _ := ExtractDetail(path[:lastPos])
 		n = d.Name
 	}
 
