@@ -17,11 +17,11 @@
     </div>
 
     <div>
-        {{ range .FSItems }}
-            {{ if eq .Item.Type "Folder"}}
-                <a href="{{ .Link }}">[{{ .Item.Name }}]</a>
+        {{ range .FileInfo }}
+            {{ if eq .File.Type "Folder"}}
+                <a href="{{ .Link }}">[{{ .File.Name }}]</a>
             {{ else }}
-                <a href="{{ .Link }}">{{ .Item.Name }}</a>
+                <a href="{{ .Link }}">{{ .File.Name }}</a>
             {{ end }}
                 <br>
         {{ end }}

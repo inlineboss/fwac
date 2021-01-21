@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"text/template"
 
-	"github.com/inlineboss/fwac/html"
+	"github.com/inlineboss/fwac/present"
 	"github.com/inlineboss/fwac/proxy"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -19,7 +19,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 	prx := proxy.MakeProxy(r, rootDir)
 
-	presenter := html.MakeWEBPresenter(prx)
+	presenter := present.MakePresenter(prx)
 
 	page, err := template.ParseFiles("templates/home.html")
 
@@ -35,25 +35,22 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func aboutHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "about")
-}
-
-func setHandlers() {
-	http.HandleFunc("/", homeHandler)
-}
-
 func main() {
 
-	rootDir = *flag.String("d", "/Users/inlineboss", "specify root direcory")
-	port := flag.Int("p", 8080, "specify port of receive")
-
+	root := flag.String("dir", "FAIL", "Root direcory")
+	port := flag.Int("port", 8080, "Port")
 	flag.Parse()
+
+	if *root == "FAIL" {
+		fmt.Println("Specify root direcory")
+		return
+	}
+	rootDir = *root
 
 	fmt.Println("Root: " + fmt.Sprint(rootDir))
 	fmt.Println("Port: " + fmt.Sprint(*port))
 
-	setHandlers()
+	http.HandleFunc("/", homeHandler)
 	http.ListenAndServe(":"+fmt.Sprint(*port), nil)
 
 }
