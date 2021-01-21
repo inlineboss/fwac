@@ -7,6 +7,6 @@ type FileInfo struct {
 	Link string
 }
 
-func MakeFSItem(linkDir string, f filesys.File) FileInfo {
+func ExtractInfo(linkDir string, f filesys.File) FileInfo {
 	return FileInfo{f, linkDir + "/" + f.Name}
 }

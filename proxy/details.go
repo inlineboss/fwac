@@ -69,7 +69,17 @@ func MakeDetails(host, path string) Details {
 		return d
 	})
 
-	return details
+	reversed := Details{}
+
+	// reverse order
+	// and append into new slice
+	for i := range details {
+		n := details[len(details)-1-i]
+		//fmt.Println(n) -- sanity check
+		reversed = append(reversed, n)
+	}
+
+	return reversed
 }
 
 // Each -

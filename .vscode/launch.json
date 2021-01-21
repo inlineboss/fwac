@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}",
-            //"args": ["-d=/Users/inlineboss/ -p=8080"]
+            //"args": ["-dir /Users/inlineboss/ -port 8080"]
         }
     ]
 }

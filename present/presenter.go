@@ -17,7 +17,7 @@ func MakePresenter(prx proxy.Proxy) Presenter {
 	elements := filesys.ShowDir(prx.FS.LongPath)
 
 	for _, e := range elements {
-		self.FileInfo = append(self.FileInfo, MakeFSItem(prx.URL.Link, e))
+		self.FileInfo = append(self.FileInfo, ExtractInfo(prx.URL.Link, e))
 	}
 
 	return self

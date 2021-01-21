@@ -23,7 +23,7 @@ func MakeProxy(r *http.Request, dir string) Proxy {
 	var prx Proxy
 	prx.URL.Host = "http://" + r.Host
 	prx.URL.Link = prx.URL.Host + r.URL.Path
-	prx.URL.Road = MakeDetails(prx.URL.Host, r.URL.Path)
+	prx.URL.Road = append(Details{}, MakeDetails(prx.URL.Host, r.URL.Path)...)
 
 	prx.FS.Root = dir
 	prx.FS.ShortPath = r.URL.Path
