@@ -9,6 +9,7 @@ const (
 	File
 )
 
+type Elements []Element
 type Element struct {
 	Name string
 	Type string
