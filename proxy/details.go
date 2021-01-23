@@ -11,25 +11,24 @@ type Detail struct {
 }
 
 // ExtractDetail -
-func MakeDetail(path string) (Detail, bool) {
+func MakeDetail(path string) Detail {
 
 	lastPos := strings.LastIndexByte(path, '/')
 
 	if lastPos == 0 && len(path) > 1 {
-		return (Detail{path[lastPos+1:], path}), false
+		return (Detail{path[lastPos+1:], path})
 	}
 	if lastPos <= 0 {
-		return (Detail{"/", "/"}), true
+		return (Detail{"/", "/"})
 	}
 
 	n := path[lastPos+1:]
 
 	if n == "" {
-		d, _ := MakeDetail(path[:lastPos])
-		n = d.Name
+		n = MakeDetail(path[:lastPos]).Name
 	}
 
-	return (Detail{n, path}), false
+	return (Detail{n, path})
 }
 
 //Details -
@@ -45,22 +44,21 @@ func MakeDetails(host, path string) Details {
 	var (
 		details Details
 		detail  Detail = Detail{Name: "", Link: path}
-		end     bool
 	)
 
 	for {
-		detail, end = MakeDetail(detail.Link)
+		detail = MakeDetail(detail.Link)
 
 		details = append(details, detail)
 
-		if detail.Link[len(detail.Link)-1] == '/' {
-			detail.Link = strings.TrimRight(detail.Link, detail.Name+"/")
-		} else {
-			detail.Link = strings.TrimRight(detail.Link, detail.Name)
+		if len(detail.Link) == 1 {
+			break
 		}
 
-		if end {
-			break
+		if detail.Link[len(detail.Link)-1] == '/' {
+			detail.Link = detail.Link[:len(detail.Link)-len(detail.Name+"/")]
+		} else {
+			detail.Link = detail.Link[:len(detail.Link)-len(detail.Name)]
 		}
 	}
 

@@ -10,7 +10,6 @@ import (
 
 	"github.com/inlineboss/fwac/present"
 	"github.com/inlineboss/fwac/proxy"
-	"github.com/inlineboss/fwac/templates"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -42,17 +41,17 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 	presenter := present.MakePresenter(prx)
 
-	page, err := template.New("tmp").Funcs(template.FuncMap{
-		"minus": func(a, b int) int {
-			return a - b
-		},
-	}).Parse(templates.Html)
-
-	// page, err := template.New("home.html").Funcs(template.FuncMap{
+	// page, err := template.New("Html").Funcs(template.FuncMap{
 	// 	"minus": func(a, b int) int {
 	// 		return a - b
 	// 	},
-	// }).ParseFiles("templates/home.html")
+	// }).Parse(templates.Html)
+
+	page, err := template.New("home.html").Funcs(template.FuncMap{
+		"minus": func(a, b int) int {
+			return a - b
+		},
+	}).ParseFiles("templates/home.html")
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

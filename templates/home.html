@@ -18,32 +18,32 @@
 </head>
 
 <body>
-    <header>
+    <header class="fixed-top">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">
                 <h1>DropIn</h1>
             </a>
         </nav>
-
+        <ul class="nav nav-tabs bg-white">
+            {{$last := len .Proxy.URL.Road}}
+            {{ range $i, $e := .Proxy.URL.Road }}
+                <li class="nav-item">
+                    {{ if eq (minus $last 1) $i}}
+                    <a class="nav-link active" href="{{ $e.Link }}"> <h3>{{ $e.Name }}</h3></a>
+                    {{ else }}
+                    <a class="nav-link" href="{{ $e.Link }}"> <h3>{{ $e.Name }}</h3></a>
+                    {{ end }}
+                </li>
+            {{ end }}
+        </ul>
     </header>
 
-    <ul class="nav nav-tabs">
-        {{$last := len .Proxy.URL.Road}}
-        {{ range $i, $e := .Proxy.URL.Road }}
-            <li class="nav-item">
-                {{ if eq (minus $last 1) $i}}
-                <a class="nav-link active" href="{{ $e.Link }}"> <h3>{{ $e.Name }}</h3></a>
-                {{ else }}
-                <a class="nav-link" href="{{ $e.Link }}"> <h3>{{ $e.Name }}</h3></a>
-                {{ end }}
-            </li>
-        {{ end }}
-    </ul>
+
 
     {{ $folderImageUrl := "https://github.com/inlineboss/fwac/blob/master/templates/folder-icon.png?raw=true" }}
     {{ $fileImageUrl := "https://github.com/inlineboss/fwac/blob/master/templates/file-icon.png?raw=true" }}
 
-    <ul class="list-group list-group-flush">
+    <ul class="list-group list-group-flush" style="padding-top: 152px">
         {{ range .FileInfo }}
         <li class="list-group-item">
             <a href="{{ .Link }}">
