@@ -1,3 +1,6 @@
+package templates
+
+const Html string = `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,3 +76,4 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+`
