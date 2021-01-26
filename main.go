@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/inlineboss/fwac/present"
 	"github.com/inlineboss/fwac/proxy"
+	"github.com/inlineboss/fwac/settings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -28,7 +28,7 @@ func templateParse(text string) (*template.Template, error) {
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 
-	prx := proxy.MakeProxy(r, rootDir)
+	prx := proxy.MakeProxy(r, settings.GetInstance().Root)
 
 	f, err := os.Stat(prx.FS.LongPath)
 	if err == nil && !f.IsDir() {
@@ -67,20 +67,9 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	root := flag.String("dir", "/Users/inlineboss/", "Root direcory")
-	port := flag.Int("port", 8080, "Port")
-	flag.Parse()
-
-	if *root == "FAIL" {
-		fmt.Println("Specify root direcory")
-		return
-	}
-	rootDir = *root
-
-	fmt.Println("Root: " + fmt.Sprint(rootDir))
-	fmt.Println("Port: " + fmt.Sprint(*port))
+	settings.GetInstance().Print()
 
 	http.HandleFunc("/", homeHandler)
-	http.ListenAndServe(":"+fmt.Sprint(*port), nil)
+	http.ListenAndServe(":"+fmt.Sprint(settings.GetInstance().Port), nil)
 
 }

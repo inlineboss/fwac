@@ -10,8 +10,8 @@ type Detail struct {
 	Link string
 }
 
-// ExtractDetail -
-func MakeDetail(path string) Detail {
+// lstIndex -
+func lstIndex(path string) Detail {
 
 	lastPos := strings.LastIndexByte(path, '/')
 
@@ -25,7 +25,7 @@ func MakeDetail(path string) Detail {
 	n := path[lastPos+1:]
 
 	if n == "" {
-		n = MakeDetail(path[:lastPos]).Name
+		n = lstIndex(path[:lastPos]).Name
 	}
 
 	return (Detail{n, path})
@@ -47,7 +47,7 @@ func MakeDetails(host, path string) Details {
 	)
 
 	for {
-		detail = MakeDetail(detail.Link)
+		detail = lstIndex(detail.Link)
 
 		details = append(details, detail)
 
